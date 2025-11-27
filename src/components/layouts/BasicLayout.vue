@@ -1,68 +1,62 @@
 <template>
-    <div>
-        <a-layout>
-            <a-layout-header :style="headerStyle">Header</a-layout-header>
-        <a-layout-content :style="contentStyle">Content</a-layout-content>
-        <a-layout-footer class="footer dynamic-gradient">Footer</a-layout-footer>
-        </a-layout>
-    </div>
-
+  <div id="basicLayout">
+    <a-layout style="min-height: 100vh">
+      <a-layout-header class="header"><GlobalHeader/></a-layout-header>
+      <a-layout-content class="content">
+        <RouterView />
+      </a-layout-content>
+      <a-layout-footer class="footer">
+        <a href="https://www.bilibili.com/" target="_blank">
+          Jimmy Pic Frontend ©2025 Created by Jimmy
+        </a>
+      </a-layout-footer>
+    </a-layout>
+  </div>
 </template>
 
-
 <script setup lang="ts">
-import type { CSSProperties } from 'vue';
-const headerStyle: CSSProperties = {
-  textAlign: 'center',
-  color: '#fff',
-  height: 64,
-  paddingInline: 50,
-  lineHeight: '64px',
-  backgroundColor: '#7dbcea',
-};
-
-const contentStyle: CSSProperties = {
-  textAlign: 'center',
-  minHeight: 120,
-  lineHeight: '120px',
-  color: '#fff',
-  backgroundColor: '#108ee9',
-};
-
-const siderStyle: CSSProperties = {
-  textAlign: 'center',
-  lineHeight: '120px',
-  color: '#fff',
-  backgroundColor: '#3ba0e9',
-};
-
-const footerStyle: CSSProperties = {
-  textAlign: 'center',
-  color: '#fff',
-  backgroundColor: '#7dbcea',
-};
-
-
+import GlobalHeader from '@/components/GlobalHeader.vue';
 </script>
 
-
 <style scoped>
-#basicLayout .footer{
-    bottom: 0;
+#basicLayout .footer {
+  background: linear-gradient(
+    to right,
+    #232323,
+    #484848,
+    #000000,
+    #454545,
+    #1c1c1c
+  );
+  padding: 16px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: white !important;
+}
+
+#basicLayout .header {
+    background: white;
+    padding-inline: 15px;
+    margin-bottom: 0;
+    position: relative;
+    border-bottom: none !important;
+    box-shadow: none !important;
 }
 
 
-.dynamic-gradient {
-  width: 100%;
-  background: linear-gradient(to right, #ff6b6b, #4ecdc4, #45b7d1);
-  background-size: 400% 400%;
-  animation: gradientShift 8s ease infinite;
-  
+
+#basicLayout .footer a {
+  color: white !important; /* 使用 !important 确保覆盖浏览器默认样式 */
+  text-decoration: none;
+  font-weight: bold; /* 去掉下划线 */
 }
 
-@keyframes gradientShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+#basicLayout .content {
+  background: #c4c4c4;
+  margin-bottom: 28px;
+  padding: 20px;
 }
 </style>
