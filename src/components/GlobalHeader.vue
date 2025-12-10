@@ -10,13 +10,20 @@
     </a-col>
     <a-col flex="auto">
       <a-menu v-model:selectedKeys="current" mode="horizontal" :items="items" @click="handleMenuClick"/>
+      
     </a-col>
     <a-col flex="100px">
-      <a-button type="primary">登录</a-button>
+      <div v-if="loginUserStore.loginUser.id">
+        <div>{{ loginUserStore.loginUser.userName }}</div>
+      </div>
+      <div v-else>
+        <a-button type="primary">登录</a-button>
+      </div>
+      
     </a-col>
     
   </a-row>
-</template>
+</template>s
 <script lang="ts" setup>
 import { h, ref } from "vue";
 import {
@@ -26,6 +33,9 @@ import {
 } from "@ant-design/icons-vue";
 import { MenuProps } from "ant-design-vue";
 import { useRouter } from "vue-router";
+import { useLoginUserStore } from "../stores/user"
+const loginUserStore = useLoginUserStore();
+
 const current = ref<string[]>(["/"]);
 const items = ref<MenuProps["items"]>([
   {
@@ -88,6 +98,8 @@ const items = ref<MenuProps["items"]>([
 ]);
 
 const router = useRouter();
+
+loginUserStore.fetchLoginUser();
 
 const handleMenuClick = ({key}: { key: string }) => {
     router.push({
