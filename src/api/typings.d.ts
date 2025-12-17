@@ -1,68 +1,119 @@
 declare namespace API {
-  type getLoginUsingGETParams = {
-    /** roleId */
-    roleId: string;
-    /** userId */
-    userId: string;
+  type BaseResponse = {
+    code?: number;
+    data?: Record<string, any>;
+    message?: string;
   };
 
-  type getRegExpUsingGETParams = {
-    /** regexp1 */
-    regexp1: string;
+  type BaseResponseListJsonTest_ = {
+    code?: number;
+    data?: JsonTest[];
+    message?: string;
   };
 
-  type helloUsingDELETEParams = {
-    /** name */
-    name?: string;
+  type BaseResponseLong_ = {
+    code?: number;
+    data?: number;
+    message?: string;
   };
 
-  type helloUsingGETParams = {
-    /** name */
-    name?: string;
+  type BaseResponseObject_ = {
+    code?: number;
+    data?: Record<string, any>;
+    message?: string;
   };
 
-  type helloUsingPATCHParams = {
-    /** name */
-    name?: string;
+  type BaseResponseString_ = {
+    code?: number;
+    data?: string;
+    message?: string;
   };
 
-  type helloUsingPOSTParams = {
-    /** name */
-    name?: string;
+  type BaseResponseUser_ = {
+    code?: number;
+    data?: User;
+    message?: string;
   };
 
-  type helloUsingPUTParams = {
-    /** name */
-    name?: string;
+  type BaseResponseUserInfoRespVO_ = {
+    code?: number;
+    data?: UserInfoRespVO;
+    message?: string;
   };
 
-  type saveUserUsingDELETEParams = {
-    age?: number;
-    name?: string;
+  type deleteUserUsingDELETEParams = {
+    /** id */
+    id: number;
   };
 
-  type saveUserUsingGETParams = {
-    age?: number;
-    name?: string;
+  type getUserPageUsingGETParams = {
+    gender?: string;
+    pageNo?: number;
+    pageSize?: number;
+    userName?: string;
   };
 
-  type saveUserUsingPATCHParams = {
-    age?: number;
-    name?: string;
-  };
-
-  type saveUserUsingPOSTParams = {
-    age?: number;
-    name?: string;
-  };
-
-  type saveUserUsingPUTParams = {
-    age?: number;
-    name?: string;
+  type JsonTest = {
+    createTime?: string;
+    editTime?: string;
+    id?: number;
+    isDelete?: number;
+    jsonData?: User;
+    updateTime?: string;
   };
 
   type User = {
-    age?: number;
-    name?: string;
+    createTime?: string;
+    editTime?: string;
+    gender?: string;
+    id?: number;
+    isDelete?: number;
+    updateTime?: string;
+    userAccount?: string;
+    userAvatar?: string;
+    userName?: string;
+    userPassword?: string;
+    userProfile?: string;
+    userRole?: string;
+    vipCode?: string;
+    vipExpireTime?: string;
+    vipNumber?: number;
+  };
+
+  type UserAddReq = {
+    userAccount?: string;
+    userName?: string;
+  };
+
+  type UserInfoRespVO = {
+    createTime?: string;
+    editTime?: string;
+    gender?: string;
+    id?: number;
+    updateTime?: string;
+    userAccount?: string;
+    userAvatar?: string;
+    userName?: string;
+    userProfile?: string;
+    userRole?: string;
+    vipCode?: string;
+    vipExpireTime?: string;
+    vipNumber?: number;
+  };
+
+  type UserLoginReq = {
+    userAccount?: string;
+    userPassword?: string;
+  };
+
+  type UserRegisterReq = {
+    checkPassword?: string;
+    userAccount?: string;
+    userPassword?: string;
+  };
+
+  type UserUpdateReq = {
+    id?: string;
+    userName?: string;
   };
 }
