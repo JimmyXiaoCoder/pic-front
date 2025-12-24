@@ -9,21 +9,43 @@
       </RouterLink>
     </a-col>
     <a-col flex="auto">
-      <a-menu v-model:selectedKeys="current" mode="horizontal" :items="items" @click="handleMenuClick"/>
-      
+      <a-menu
+        v-model:selectedKeys="current"
+        mode="horizontal"
+        :items="items"
+        @click="handleMenuClick"
+      />
     </a-col>
-    <a-col flex="100px">
+    <a-col flex>
       <div v-if="loginUserStore.loginUser.id">
-        <div>{{ loginUserStore.loginUser.userName }}</div>
+        <a-dropdown v-model:open="visible">
+          <a class="ant-dropdown-link" @click.prevent>
+            <div>{{ loginUserStore.loginUser.userName }}</div>
+            <DownOutlined />
+          </a>
+          <template #overlay>
+            <a-menu @click="handleLoginMenuClick">
+              <a-menu-item key="1"
+                >个人中心</a-menu-item
+              >
+              <a-menu-item key="2"
+                >注销</a-menu-item
+              >
+              <!-- <a-menu-item key="3">Clicking me will close the menu</a-menu-item> -->
+            </a-menu>
+          </template>
+        </a-dropdown>
+        
       </div>
       <div v-else>
-        <a-button type="primary">登录</a-button>
+        <a-button style="margin-right: 10px" @click="handleRegister"
+          >注册</a-button
+        >
+        <a-button type="primary" @click="handleLogin">登录</a-button>
       </div>
-      
     </a-col>
-    
   </a-row>
-</template>s
+</template>
 <script lang="ts" setup>
 import { h, ref } from "vue";
 import {
@@ -31,15 +53,26 @@ import {
   AppstoreOutlined,
   SettingOutlined,
 } from "@ant-design/icons-vue";
-import { MenuProps } from "ant-design-vue";
 import { useRouter } from "vue-router";
-import { useLoginUserStore } from "../stores/user"
+import { useLoginUserStore } from "../stores/user";
+import type { MenuProps } from 'ant-design-vue';
 const loginUserStore = useLoginUserStore();
+
+const visible = ref(false);
+
+const handleLoginMenuClick: MenuProps['onClick'] = e => {
+  if (e.key === '2') {
+    visible.value = false;
+    loginUserStore.userLogout().then(() => {
+      router.push({ path: '/' });
+    });
+  }
+};
 
 const current = ref<string[]>(["/"]);
 const items = ref<MenuProps["items"]>([
   {
-    key: "/", 
+    key: "/",
     icon: () => h(MailOutlined),
     label: "主页",
     title: "主页",
@@ -50,42 +83,6 @@ const items = ref<MenuProps["items"]>([
     label: "关于",
     title: "关于",
   },
-  //   {
-  //     key: 'sub1',
-  //     icon: () => h(SettingOutlined),
-  //     label: 'Navigation Three - Submenu',
-  //     title: 'Navigation Three - Submenu',
-  //     children: [
-  //       {
-  //         type: 'group',
-  //         label: 'Item 1',
-  //         children: [
-  //           {
-  //             label: 'Option 1',
-  //             key: 'setting:1',
-  //           },
-  //           {
-  //             label: 'Option 2',
-  //             key: 'setting:2',
-  //           },
-  //         ],
-  //       },
-  //       {
-  //         type: 'group',
-  //         label: 'Item 2',
-  //         children: [
-  //           {
-  //             label: 'Option 3',
-  //             key: 'setting:3',
-  //           },
-  //           {
-  //             label: 'Option 4',
-  //             key: 'setting:4',
-  //           },
-  //         ],
-  //       },
-  //     ],
-  //   },
   {
     key: "others",
     label: h(
@@ -101,24 +98,34 @@ const router = useRouter();
 
 loginUserStore.fetchLoginUser();
 
-const handleMenuClick = ({key}: { key: string }) => {
-    router.push({
-        path: key,
-    });
+const handleMenuClick = ({ key }: { key: string }) => {
+  router.push({
+    path: key,
+  });
 };
 
 router.afterEach((to) => {
-    current.value = [to.path];
-    console.log(current)
+  current.value = [to.path];
+  console.log(current);
 });
 
+const handleRegister = () => {
+  router.push({
+    path: "/user/register",
+  });
+};
+
+const handleLogin = () => {
+  router.push({
+    path: "/user/login",
+  });
+};
 </script>
 
 <style scoped>
 #globalHeader .title-bar {
   display: flex;
   align-items: center;
-  
 }
 
 .title {

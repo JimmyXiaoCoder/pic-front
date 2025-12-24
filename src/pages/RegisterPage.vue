@@ -38,7 +38,6 @@
     <!-- <a-form-item name="remember" :wrapper-col="{ offset: 8, span: 16 }">
       <a-checkbox v-model:checked="formState.remember">Remember me</a-checkbox>
     </a-form-item> -->
-    <a-alert message="Error" type="error" show-icon />
 
     <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
       <a-button type="primary" html-type="submit" @click="registerUser">Submit</a-button>
@@ -49,6 +48,8 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import { registerUsingPost } from "@/api/userController"
+import { message } from "ant-design-vue";
+import router from "@/router";
 
 const formState = reactive<API.UserRegisterReq>({
   userAccount: "",
@@ -66,13 +67,19 @@ const onFinishFailed = (errorInfo: any) => {
 const registerUser = async () => {
   try {
     const response = await registerUsingPost(formState);
-    console.log("Registration successful:", response);
+    if (response.data.code === 0) {
+      message.success("注册成功")
+      router.push({ path: '/user/login' });
+    }
+    else {
+      message.error("注册失败：" + response.data.message)
+    }
   } catch (error) {
-    console.error("Registration failed:", error);
+    console.error("注册表单填写失败", error);
   }
 };
 
-const title = "Register";
+const title = "RegisterPage";
 </script>
 
 <style scoped></style>
