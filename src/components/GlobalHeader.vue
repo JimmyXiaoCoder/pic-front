@@ -61,6 +61,10 @@ const loginUserStore = useLoginUserStore();
 const visible = ref(false);
 
 const handleLoginMenuClick: MenuProps['onClick'] = e => {
+  if (e.key === '1') {
+    handlePersonalCenter()
+  }
+
   if (e.key === '2') {
     visible.value = false;
     loginUserStore.userLogout().then(() => {
@@ -112,6 +116,12 @@ router.afterEach((to) => {
 const handleRegister = () => {
   router.push({
     path: "/user/register",
+  });
+};
+
+const handlePersonalCenter = () => {
+  router.push({
+    path: "/user/userPersonalCenter",
   });
 };
 

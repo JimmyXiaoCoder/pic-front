@@ -15,13 +15,6 @@ export const useLoginUserStore = defineStore("loginUser", () => {
     loginUser.value = response.data.data;
 
     console.log("fetchLoginUser", loginUser.value);
-
-    // setTimeout(() => {
-    //     loginUser.value = {
-    //         userName: "Jimmy",
-    //         id: 1,
-    //     }
-    // },3000)
   }
 
   const userLogout = async () => {

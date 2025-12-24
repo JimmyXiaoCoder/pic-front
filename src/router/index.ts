@@ -3,6 +3,7 @@ import HomePage from '../pages/HomePage.vue'
 import UserLogin from '../pages/LoginPage.vue'
 import UserRegister from '../pages/RegisterPage.vue'
 import UserManagePage from '../pages/UserManagePage.vue'
+import UserPersonalCenter from '../pages/UserPersonalCenterPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,6 +32,11 @@ const router = createRouter({
       path: '/admin/userManage',
       name: '用户管理',
       component: UserManagePage,
+    },
+    {
+      path: '/user/userPersonalCenter',
+      name: '个人中心',
+      component: UserPersonalCenter,
     }
   ],
 })
