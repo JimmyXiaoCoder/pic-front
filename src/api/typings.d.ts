@@ -115,5 +115,7 @@ declare namespace API {
   type UserUpdateReq = {
     id?: string;
     userName?: string;
+    userAvatar?: string;
+    gender?: string;
   };
 }
