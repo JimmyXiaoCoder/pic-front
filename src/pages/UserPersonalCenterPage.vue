@@ -2,8 +2,8 @@
   <div class="userInfoTable">
     <div class="userAvatar">
       <a-space wrap :size="16">
-        <a-avatar :size="64">
-          <img src="https://jimmy-pic-1328446628.cos.ap-guangzhou.myqcloud.com/out_logo.png"></img>
+        <a-avatar src="https://jimmy-pic-1328446628.cos.ap-guangzhou.myqcloud.com/out_logo.png" :size="64">
+          
           <!-- <template #icon><UserOutlined /></template> -->
         </a-avatar>
       </a-space>
