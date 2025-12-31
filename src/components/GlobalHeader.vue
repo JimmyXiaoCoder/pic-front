@@ -17,25 +17,35 @@
       />
     </a-col>
     <a-col flex>
-      <div v-if="loginUserStore.loginUser.id">
+      <div class="userInfo" v-if="loginUserStore.loginUser.id">
         <a-dropdown v-model:open="visible">
           <a class="ant-dropdown-link" @click.prevent>
-            <div>{{ loginUserStore.loginUser.userName }}</div>
+            <div style="color: black; font-weight: bold">
+              {{ loginUserStore.loginUser.userName }}
+            </div>
             <DownOutlined />
           </a>
           <template #overlay>
             <a-menu @click="handleLoginMenuClick">
-              <a-menu-item key="1"
-                >个人中心</a-menu-item
-              >
-              <a-menu-item key="2"
-                >注销</a-menu-item
-              >
+              <a-menu-item key="1">个人中心</a-menu-item>
+              <a-menu-item key="2">注销</a-menu-item>
               <!-- <a-menu-item key="3">Clicking me will close the menu</a-menu-item> -->
             </a-menu>
           </template>
         </a-dropdown>
-        
+        <a-dropdown v-model:open="cardVisible">
+          <a class="ant-dropdown-link" @click.prevent>
+            <a-space wrap :size="8">
+              <a-avatar :src="loginUserStore.loginUser.userAvatar" :size="64">
+                <!-- <template #icon><UserOutlined /></template> -->
+              </a-avatar>
+            </a-space>
+            <!-- <DownOutlined /> -->
+          </a>
+          <template #overlay>
+            <UserInfoCardPage />
+          </template>
+        </a-dropdown>
       </div>
       <div v-else>
         <a-button style="margin-right: 10px" @click="handleRegister"
@@ -55,20 +65,23 @@ import {
 } from "@ant-design/icons-vue";
 import { useRouter } from "vue-router";
 import { useLoginUserStore } from "../stores/user";
-import type { MenuProps } from 'ant-design-vue';
+import type { MenuProps } from "ant-design-vue";
+import UserInfoCardPage from "@/pages/UserInfoCardPage.vue";
 const loginUserStore = useLoginUserStore();
 
 const visible = ref(false);
+const cardVisible = ref(false);
 
-const handleLoginMenuClick: MenuProps['onClick'] = e => {
-  if (e.key === '1') {
-    handlePersonalCenter()
+const handleLoginMenuClick: MenuProps["onClick"] = (e) => {
+  if (e.key === "1") {
+    visible.value = false;
+    handlePersonalCenter();
   }
 
-  if (e.key === '2') {
+  if (e.key === "2") {
     visible.value = false;
     loginUserStore.userLogout().then(() => {
-      router.push({ path: '/' });
+      router.push({ path: "/" });
     });
   }
 };
@@ -146,5 +159,11 @@ const handleLogin = () => {
 
 .logo {
   height: 48px;
+}
+
+.userInfo {
+  display: inline-flex; /* 头像与下拉区域同一行 */
+  align-items: center;
+  gap: 8px; /* 头像与用户名间距 */
 }
 </style>

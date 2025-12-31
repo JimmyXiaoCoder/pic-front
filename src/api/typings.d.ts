@@ -117,5 +117,10 @@ declare namespace API {
     userName?: string;
     userAvatar?: string;
     gender?: string;
+    avatarFile?: File;
   };
+
+  type FileUploadReq = {
+    file?: File;
+  }
 }

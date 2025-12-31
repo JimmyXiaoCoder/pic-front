@@ -2,8 +2,7 @@
   <div class="userInfoTable">
     <div class="userAvatar">
       <a-space wrap :size="16">
-        <a-avatar src="https://jimmy-pic-1328446628.cos.ap-guangzhou.myqcloud.com/out_logo.png" :size="64">
-          
+        <a-avatar :src="loginUserStore.loginUser.userAvatar" :size="64">
           <!-- <template #icon><UserOutlined /></template> -->
         </a-avatar>
       </a-space>
@@ -30,6 +29,25 @@
       <a-button class="edit" :span="16" @click="handleOpen">Edit</a-button>
       <a-modal v-model:open="open" title="Basic Modal" @ok="handleOk">
         <a-form :model="formState">
+          <a-form-item label="头像" name="avatarFile">
+            <a-upload
+              v-model:fileList="fileList"
+              maxCount="1"
+              name="avatarFile"
+              list-type="picture-card"
+              class="avatar-uploader"
+              :show-upload-list="false"
+              :before-upload="() => false"
+              @change="handlePicChange"
+            >
+              <img v-if="imageUrl" :src="imageUrl" alt="avatar" style="width: 50%; height: 100%; object-fit: cover" />
+              <div v-else>
+                <loading-outlined v-if="loading"></loading-outlined>
+                <plus-outlined v-else></plus-outlined>
+                <div class="ant-upload-text">Upload</div>
+              </div>
+            </a-upload>
+          </a-form-item>
           <a-form-item
             label="userName"
             name="userName"
@@ -79,30 +97,68 @@ import { message } from "ant-design-vue";
 import { useLoginUserStore } from "@/stores/user";
 import { reactive, ref } from "vue";
 import { updateUserUsingPost } from "@/api/userController";
+import { uploadFileByUser } from "@/api/fileController";
+import type { UploadChangeParam } from "ant-design-vue";
+
+const uploadFile = reactive<API.FileUploadReq>({
+  file: undefined,
+});
 
 const formState = reactive<API.UserUpdateReq>({
   userName: "",
   id: "",
   userAvatar: "",
   gender: "",
+  avatarFile: undefined,
 });
+
+const imageUrl = ref<any>("");
 
 const loginUserStore = useLoginUserStore();
 
 const open = ref(false);
 
+const handlePicChange = async (info: UploadChangeParam) => {
+  
+  uploadFile.file = info.file;
+
+  const response = await uploadFileByUser(uploadFile);
+  console.log("upload response", response);
+
+  if (response.data.code === 0) {
+    formState.userAvatar = response.data.data;
+    imageUrl.value = response.data.data;
+    message.success("头像上传成功");
+  } else {
+    message.error("头像上传失败：" + response.data.message);
+  }
+};
+
+const loading = ref<boolean>(false);
+
 const handleOk = async () => {
+  // if (fileList.value.length > 0) {
+  //   formState.avatarFile = fileList.value[0].originFileObj;
+  // }
+
+  loading.value = true;
+
   const response = await updateUserUsingPost(formState);
 
   if (response.data.code === 0) {
+    loading.value = false;
     message.success("更新成功");
     loginUserStore.fetchLoginUser().then(() => {
       open.value = false;
     });
   } else {
+    loading.value = false;
     message.error("更新失败：" + response.data.message);
   }
 };
+
+const fileList = ref<any[]>([]);
+
 const handleOpen = () => {
   formState.userName = loginUserStore.loginUser.userName;
   formState.id = loginUserStore.loginUser.id;
@@ -123,24 +179,31 @@ console.log("loginUserStore", loginUserStore.loginUser);
 <style scoped>
 .userInfoTable {
   /* display: flex; */
-  margin-top: 1%;
-  margin-left: 20%;
-  margin-right: 20%;
+  margin-top: 3%;
+  width: 400px;
+  margin-left: 30%;
+  margin-right: 30%;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  /* 四周扩散阴影，模拟离地 */
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.12);
+  border-radius: 16px;
 }
 
 .edit {
-  margin-left: 20%;
+  margin-left: 10%;
+  margin-top: 15px;
 }
 
 .userAvatar {
   display: flex;
   align-items: flex-start; /* 对齐顶部 */
-  margin-bottom: 40px;
+  margin-left: 15px;
+  margin-bottom: 20px;
   width: 100%;
 }
 
 .gender-man {
-  margin-top: 5px;
+  margin-top: 15px;
   margin-left: 2px;
   font-size: large;
   font-weight: 1000;
@@ -149,19 +212,33 @@ console.log("loginUserStore", loginUserStore.loginUser);
 
 .gender-woman {
   font-size: large;
-  margin-top: 5px;
+  margin-top: 15px;
   margin-left: 2px;
   font-weight: 1000;
   color: rgb(255, 105, 180);
 }
 .userName {
-  margin-top: 5px;
+  margin-top: 15px;
   margin-left: 10px;
   font-size: 24px;
   font-weight: 600;
 }
 
 .infoDetails {
-  /* margin-left: 2%; */
+  margin-left: 10%;
+}
+
+.avatar-uploader > .ant-upload {
+  width: 128px;
+  height: 128px;
+}
+.ant-upload-select-picture-card i {
+  font-size: 32px;
+  color: #999;
+}
+
+.ant-upload-select-picture-card .ant-upload-text {
+  margin-top: 8px;
+  color: #666;
 }
 </style>

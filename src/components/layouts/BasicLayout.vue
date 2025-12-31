@@ -55,7 +55,7 @@ import GlobalHeader from '@/components/GlobalHeader.vue';
 }
 
 #basicLayout .content {
-  background: #c4c4c4;
+  background: white;
   margin-bottom: 28px;
   padding: 20px;
 }

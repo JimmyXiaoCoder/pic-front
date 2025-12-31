@@ -109,7 +109,7 @@ export async function updateUserUsingPost(
   return request<API.BaseResponseObject_>("/api/user/updateUser", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
     },
     data: body,
     ...(options || {}),
